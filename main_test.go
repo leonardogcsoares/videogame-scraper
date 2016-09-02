@@ -36,6 +36,8 @@ func TestUnicode(t *testing.T) {
 		"MLB 10 The Show":                    true,
 		"Castlevania Lament of Innocence":    true,
 		"Grand Theft Auto Vice City Stories": true,
+		// "SOCOM US Navy Seals":                true, // False positive as "socom us navy seals fireteam bravo 2" is not in the game list
+		// "Hook":                               true, // False positive due to "high usage" of the word in many contexts
 	}
 
 	buf, err := ioutil.ReadFile("phrases-from-text/test-html-unicode.html")
