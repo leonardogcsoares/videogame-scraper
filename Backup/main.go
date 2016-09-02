@@ -17,9 +17,7 @@ func main() {
 	// buf, err := ioutil.ReadFile("phrases-from-text/test-html3.html")
 	// buf, err := ioutil.ReadFile("phrases-from-text/test-html4.html")
 	// buf, err := ioutil.ReadFile("phrases-from-text/test-html5.html")
-	// buf, err := ioutil.ReadFile("phrases-from-text/test-html6.html")
-	// buf, err := ioutil.ReadFile("phrases-from-text/test-html-infinite-loop.html")
-	buf, err := ioutil.ReadFile("phrases-from-text/test-html-unicode.html")
+	buf, err := ioutil.ReadFile("phrases-from-text/test-html6.html")
 	if err != nil {
 		fmt.Println("Error on reading file")
 		fmt.Println(err)
@@ -55,18 +53,10 @@ func GetMatches(document string) ([]string, error) {
 
 	// Then transforms everything in the document passed to lowercase
 	document = strings.ToLower(document)
-	document = removeShockwaveScripts(document)
 	document = strings.Replace(document, ":", "", -1)
 	document = strings.Replace(document, "-", " ", -1)
-	document = strings.Replace(document, "–", " ", -1)
 	document = strings.Replace(document, ".", "", -1)
 	document = strings.Replace(document, "&nbsp;", "", -1)
-	document = removeExtraWhitespaces(document) // This has to be done lastly since "-" and "–" are replaced with a whitespace
-
-	// if f, err := os.Create("cleanedDocument.txt"); err == nil {
-	// 	f.WriteString(document)
-	// 	f.Close()
-	// }
 
 	// For each phrase starting from longest to shortest
 	for _, p := range phrases {
@@ -118,20 +108,6 @@ func lookoutPhrases() ([]string, error) {
 	}
 
 	return phrases, err
-}
-
-func removeExtraWhitespaces(doc string) string {
-	re := regexp.MustCompile("[  \t]+")
-	replaced := re.ReplaceAll([]byte(doc), []byte(" "))
-	return string(replaced)
-}
-
-// Since the ways shockwave appears in the script is very specific this was the only way I could think
-// of initially to remove their false positive appearances.
-func removeShockwaveScripts(doc string) string {
-	re := regexp.MustCompile("shockwave flash|shockwave-flash|shockwaveflash|/shockwave/")
-	replaced := re.ReplaceAll([]byte(doc), []byte(" "))
-	return string(replaced)
 }
 
 // ByLength is a string interface implementaion to be used for sorting
